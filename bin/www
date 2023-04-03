@@ -4,22 +4,26 @@
  * Module dependencies.
  */
 
-const app = require('../app');
-const debug = require('debug')('test-server:server');
-const http = require('http');
+var app = require('../app');
+var debug = require('debug')('confusionserver:server');
+var http = require('http');
+var https = require('https');
+var fs = require('fs');
 
 /**
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
+app.set('secPort',port+442)
 
 /**
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+var server = http.createServer(app);
+
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -29,6 +33,17 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+var options = {
+  key: fs.readFileSync(__dirname+'/private.key'),
+  cert: fs.readFileSync(__dirname+'/certificate.pem')
+};
+
+var secureServer = https.createServer(options,app);
+secureServer.listen(app.get('secPort'), () => {
+  console.log('Server listening on port ',app.get('secPort'));
+});
+secureServer.on('error', onError);
+secureServer.on('listening', onListening);
 /**
  * Normalize a port into a number, string, or false.
  */
