@@ -11,6 +11,7 @@ var config=require('./config')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var classRoomRouter = require('./routes/classRoomRouter')
 
 const cors=require('cors')
 const mongoose = require('mongoose');
@@ -48,12 +49,12 @@ app.use(passport.initialize())
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 //routes that can access the public folder
-
 app.use('/imageUpload',uploadRouter)
-
+app.use('/classroom',classRoomRouter)
 
 // catch 404 and forward to error handler
 
