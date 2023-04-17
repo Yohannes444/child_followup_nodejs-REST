@@ -34,6 +34,10 @@ var User = new Schema({
     cashier:{
       type:Boolean,
       default:false
+    },
+    active:{
+      type:Boolean,
+      default:true
     }
 
 });

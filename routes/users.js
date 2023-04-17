@@ -9,10 +9,10 @@ router.use(bodyParser.json())
 /* GET users listing. */
 router.get('/',cors.corsWithOptions, authenticate.verifyUser,(req,res,next) => {
   user.findOne({_id:req.user._id})
-  .then((users) => {
+  .then((cashier) => {
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json');
-      res.json(users);
+      res.json(cashier);
   }, (err) => next(err))
   .catch((err) => next(err));
 });
