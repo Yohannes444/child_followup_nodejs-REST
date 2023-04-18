@@ -50,8 +50,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize())
 
 app.use('/', indexRouter);
+//<<<<<<< Updated upstream
 app.use('/users', usersRouter);
 
+//=======
+app.use('/git ', usersRouter);
+//>>>>>>> Stashed changes
 app.use(express.static(path.join(__dirname, 'public')));
 
 //routes that can access the public folder
