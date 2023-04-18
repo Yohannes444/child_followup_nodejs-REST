@@ -11,6 +11,9 @@ var config=require('./config')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var classRoomRouter = require('./routes/classRoomRouter')
+var cashierRouter = require ('./routes/cashierRouter')
+var teacherRouter = require ('./routes/teacherRouter')
 
 const cors=require('cors')
 const mongoose = require('mongoose');
@@ -47,13 +50,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize())
 
 app.use('/', indexRouter);
+//<<<<<<< Updated upstream
 app.use('/users', usersRouter);
+
+//=======
+app.use('/git ', usersRouter);
+//>>>>>>> Stashed changes
 app.use(express.static(path.join(__dirname, 'public')));
 
 //routes that can access the public folder
-
 app.use('/imageUpload',uploadRouter)
-
+app.use('/classroom',classRoomRouter)
+app.use('/cashier',cashierRouter)
+app.use('/teacher',teacherRouter)
 
 // catch 404 and forward to error handler
 
