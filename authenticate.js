@@ -59,3 +59,23 @@ exports.verifyAdmin = (req,res,next)=>{
         return next(err);
     }
 };
+
+exports.verifyCashier = (req,res,next)=>{
+    if(req.user.cashier){
+        next()
+    }else{
+        var err = new Error('you are not a cashier')
+        err.status= 403
+        return next(err)
+    }
+}
+
+exports.verifyTeacher = (req,res,next)=>{
+    if(req.user.teacher){
+        next()
+    }else{
+        var err =new Error("you are not teacher so you can not excuet this task")
+        err.status= 403
+        return next(err)
+    }
+}

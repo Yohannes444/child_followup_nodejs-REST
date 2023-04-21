@@ -1,18 +1,6 @@
 var mongoose=require('mongoose')
 const Schema=mongoose.Schema
 
-const TeacherSchema = new Schema({
-    teacher:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'user'
-    }
-})
-const StudentsSchema = new Schema({
-    student:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'child'
-    }
-})
 var classRoom = new Schema({
     className:{
         type:String,
@@ -24,8 +12,14 @@ var classRoom = new Schema({
         default:0,
         require:true
     },
-    teachersList:[TeacherSchema],
-    StudentsList:[StudentsSchema]
+    teachersList:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'user'
+    }],
+    StudentsList:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'student'
+    }]
 })
 
 var ClassRoom =  mongoose.model('Classroom',classRoom)

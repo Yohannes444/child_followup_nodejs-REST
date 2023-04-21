@@ -18,6 +18,8 @@ var teacherRouter = require ('./routes/teacherRouter')
 const cors=require('cors')
 const mongoose = require('mongoose');
 const uploadRouter= require('./routes/UploadRouter');
+const studentRouter = require ('./routes/studentWightListRouter')
+
 const url = config.mongoUrl;
 const connect = mongoose.connect(url);
 connect.then((db) => {
@@ -63,6 +65,7 @@ app.use('/imageUpload',uploadRouter)
 app.use('/classroom',classRoomRouter)
 app.use('/cashier',cashierRouter)
 app.use('/teacher',teacherRouter)
+app.use('/addStudent',studentRouter)
 
 // catch 404 and forward to error handler
 

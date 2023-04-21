@@ -3,7 +3,7 @@ var  Schema=mongoose.Schema
 
 
 var ChildSchema= new Schema({
-    parent:mongoose.Schema.Types.ObjectId,
+    
     firstName:{
         type:String,
         default:'',
@@ -14,7 +14,22 @@ var ChildSchema= new Schema({
         default:'',
         require:true
     },
-    Ssection:mongoose.Schema.Types.ObjectId
+    transcript:{
+        type:String,
+        require:true
+    },
+    receipt:{
+        type:String,
+        default:''
+    },
+    parent:{
+        type:mongoose.Schema.Types.ObjectId,
+    },
+    section:{
+        type:mongoose.Schema.Types.ObjectId,
+        require:true
+    },
+    
 })
 
 module.exports = mongoose.model('child',ChildSchema)
