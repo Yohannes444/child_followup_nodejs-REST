@@ -6,6 +6,7 @@ var authenticate=require('../authenticate')
 var WightListRouter = express.Router();
 var cors=require('./cors');
 const multer = require('multer');
+const mongoose = require('mongoose');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -40,15 +41,41 @@ WightListRouter.route('/')
     .catch((err)=>next(err))
 })
 
-.post(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyParent, upload.fields([{ name: 'transcript', maxCount: 1 }, { name: 'receipt', maxCount: 1 }]),(req,res,next)=>{
-    const { firstName, lastName } = req.body;
-    const transcriptFile = req.files['transcript'][0];
-    const receiptFile = req.files['receipt'][0];
+.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyParent, upload.fields([{ name: 'transcript' }, { name: 'receipt' }]), (req, res, next) => {
+    try{
 
-        console.log(req.files)
-        res.status=500
-        res.end('ther is no code for this task writen yote')
-})
+    // Extract the form data from the request
+    const { firstName, lastName, selectedClassRoom } = req.body;
+  
+    // Get the paths of the uploaded files
+    const transcriptPath = req.files['transcript'][0].path;
+    const receiptPath = req.files['receipt'][0].path;
+    const selectedClassRooms=mongoose.Types.ObjectId (selectedClassRoom)
+
+  
+    // Create a new WightList document with the form data and file paths
+    const newWightList =  {
+      firstName:firstName,
+      lastName:lastName,
+      selectedClassRoom: selectedClassRooms,
+      transcript: transcriptPath,
+      receipt: receiptPath,
+      parent: req.user._id,
+      approved: false
+    };
+    // Save the new WightList document to the database
+    WightList.create(newWightList)
+      .then(wightList => {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(wightList);
+      })
+      .catch(err => next(err));
+    } catch (err) {
+        next(err);
+      }
+  })
+
 .put(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyParent,(req,res,next)=>{
 
 })

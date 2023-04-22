@@ -7,32 +7,35 @@ var StudentWightListSchema= new Schema({
     firstName:{
         type:String,
         default:'',
-        require:true
+       
     },
     lastName:{
         type:String,
         default:'',
-        require:true
+         
     },
     transcript:{
         type:String,
-        require:true,
+         
         default:''
     },
     receipt:{
         type:String,
         default:''
     },
-    section:{
+    selectedClassRoom:{
         type:mongoose.Schema.Types.ObjectId,
-        require:true
+        ref:'classroom',
+        
     },
     parent:{
-        tyep:mongoose.Schema.Types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'family',
+        
     },
     aproved:{
         type:Boolean,
     }
 })
 
-module.exports = mongoose.model('child',StudentWightListSchema)
+module.exports = mongoose.model('wightList',StudentWightListSchema)
