@@ -65,7 +65,7 @@ app.use('/imageUpload',uploadRouter)
 app.use('/classroom',classRoomRouter)
 app.use('/cashier',cashierRouter)
 app.use('/teacher',teacherRouter)
-app.use('/addStudent',studentRouter)
+app.use('/wightlist',studentRouter)
 
 // catch 404 and forward to error handler
 

@@ -25,17 +25,15 @@ var StudentWightListSchema= new Schema({
     },
     selectedClassRoom:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'classroom',
+        ref:'Classroom',
         
     },
     parent:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'family',
+        ref:'user',
         
-    },
-    aproved:{
-        type:Boolean,
     }
+   
 })
 
 module.exports = mongoose.model('wightList',StudentWightListSchema)
