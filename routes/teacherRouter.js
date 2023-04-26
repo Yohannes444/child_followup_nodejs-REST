@@ -29,11 +29,11 @@ teacherRouter.route('/')
 teacherRouter.route('/:teacherId')
 .options(cors.corsWithOptions,(req,res)=>{res.sendStatus(200)})
 
-.get(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyAdmin,(req,res,next)=>{
+.get(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyTeacher,(req,res,next)=>{
     User.findById(req.params.teacherId)
     .then((resalt)=>{
         if(resalt){
-            if(resalt.cashier){
+            if(resalt.teacher){
                 res.statusCode =200
                 res.setHeader('Content-Type','application/json')
                 res.Json(resalt)
@@ -63,7 +63,7 @@ teacherRouter.route('/:teacherId')
       return res.status(404).json({ message: 'User not found' })
     }
 
-    if (!user.cashier) {
+    if (!user.teacher) {
       return res.status(403).json({ message: 'Forbidden' })
     }
 

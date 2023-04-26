@@ -70,11 +70,12 @@ exports.verifyCashier = (req,res,next)=>{
     }
 }
 
+
 exports.verifyTeacher = (req,res,next)=>{
     if(req.user.teacher){
         next()
     }else{
-        var err =new Error("you are not teacher so you can not excuet this task")
+        var err = new Error('you are not a teacher')
         err.status= 403
         return next(err)
     }

@@ -24,9 +24,11 @@ var ChildSchema= new Schema({
     },
     parent:{
         type:mongoose.Schema.Types.ObjectId,
+        ref:'user'
     },
     section:{
         type:mongoose.Schema.Types.ObjectId,
+        ref:'Classroom',
         require:true
     },
     

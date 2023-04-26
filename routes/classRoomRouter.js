@@ -62,4 +62,29 @@ classRoomRouter.route('/')
   
 })
 
+classRoomRouter.route('/teacherview')
+.options(cors.corsWithOptions,(req,res)=>{res.sendStatus(200)})
+
+.get(cors.cors,authenticate.verifyUser,authenticate.verifyTeacher,(req,res,next)=>{
+    const teacherId = req.user.id;
+    console.log(teacherId)
+
+    ClassRoom.find({ teachersList: teacherId })
+    .then((classrooms) => {
+        if (classrooms.length > 0) {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(classrooms);
+          } else {
+            const err = new Error('No classrooms found for this teacher!');
+            err.status = 404;
+            return next(err);
+          }
+    })
+    .catch((err) => {
+      next(err)
+    });
+
+})
+
 module.exports = classRoomRouter
