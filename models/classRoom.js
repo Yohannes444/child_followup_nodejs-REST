@@ -18,7 +18,7 @@ var classRoom = new Schema({
     }],
     StudentsList:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'student'
+        ref:'child'
     }]
 })
 

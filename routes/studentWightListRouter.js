@@ -117,8 +117,21 @@ const receiptPath = path.join('images', req.files['receipt'][0].originalname).sp
         section: student.selectedClassRoom._id
       });
 
+       // Find the class room
+       const classRoom = await ClassRoom.findById(student.selectedClassRoom._id).populate('StudentsList');
+
+       if (!classRoom) {
+         return res.status(404).json({ error: 'Class room not found' });
+       }
+ 
+       // Check if class room is full
+       if (classRoom.StudentsList.length >= classRoom.classSize) {
+         return res.status(400).json({ error: 'Class room is full' });
+       }
+
       const createdChild = await newChild.save();
 
+      
       // Add the student to the class room's student list
       await ClassRoom.findByIdAndUpdate(student.selectedClassRoom._id, {
         $push: { StudentsList: createdChild._id }
