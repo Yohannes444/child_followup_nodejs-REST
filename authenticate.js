@@ -41,7 +41,13 @@ exports.verifyUser = passport.authenticate('jwt', {session: false});
 
 exports.verifyParent=(req,res,next)=>{
     if(req.user.parent){
-        next()
+        if(req.user.active){
+            next()
+        }else{
+            var err = new Error('you are acoutn has bed disabled')
+            err.status= 403
+            return next(err)
+        }
     }else{
         var err=new Error('You are not authorized to perform this operation!');
         err.status=403;
@@ -62,7 +68,13 @@ exports.verifyAdmin = (req,res,next)=>{
 
 exports.verifyCashier = (req,res,next)=>{
     if(req.user.cashier){
-        next()
+        if(req.user.active){
+            next()
+        }else{
+            var err = new Error('you are acoutn has bed disabled')
+            err.status= 403
+            return next(err)
+        }
     }else{
         var err = new Error('you are not a cashier')
         err.status= 403
@@ -72,8 +84,14 @@ exports.verifyCashier = (req,res,next)=>{
 
 
 exports.verifyTeacher = (req,res,next)=>{
-    if(req.user.teacher){
-        next()
+    if(req.user.teacher  ){
+        if(req.user.active){
+            next()
+        }else{
+            var err = new Error('you are acoutn has bed disabled')
+            err.status= 403
+            return next(err)
+        }
     }else{
         var err = new Error('you are not a teacher')
         err.status= 403

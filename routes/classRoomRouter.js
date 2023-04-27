@@ -70,6 +70,7 @@ classRoomRouter.route('/teacherview')
     console.log(teacherId)
 
     ClassRoom.find({ teachersList: teacherId })
+    .populate('StudentsList')
     .then((classrooms) => {
         if (classrooms.length > 0) {
             res.statusCode = 200;

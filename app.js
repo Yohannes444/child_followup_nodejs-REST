@@ -14,10 +14,10 @@ var usersRouter = require('./routes/users');
 var classRoomRouter = require('./routes/classRoomRouter')
 var cashierRouter = require ('./routes/cashierRouter')
 var teacherRouter = require ('./routes/teacherRouter')
+var materialRouter = require ('./routes/materilaRouter')
 
 const cors=require('cors')
 const mongoose = require('mongoose');
-const uploadRouter= require('./routes/UploadRouter');
 const studentRouter = require ('./routes/studentWightListRouter')
 
 const url = config.mongoUrl;
@@ -61,11 +61,11 @@ app.use('/git ', usersRouter);
 app.use(express.static(path.join(__dirname, 'public')));
 
 //routes that can access the public folder
-app.use('/imageUpload',uploadRouter)
 app.use('/classroom',classRoomRouter)
 app.use('/cashier',cashierRouter)
 app.use('/teacher',teacherRouter)
 app.use('/wightlist',studentRouter)
+app.use('/classMatrial',materialRouter)
 
 // catch 404 and forward to error handler
 

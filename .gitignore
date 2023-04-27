@@ -7,3 +7,9 @@ public/images/*.png
 public/images/*.gif
 public/images/*.pdf
 
+public/materials/*.jpg
+public/materials/*.jpeg
+public/materials/*.png
+public/materials/*.gif
+public/materials/*.pdf
+public/materials/*.ppt

@@ -69,7 +69,6 @@ const receiptPath = path.join('images', req.files['receipt'][0].originalname).sp
       transcript: transcriptPath,
       receipt: receiptPath,
       parent: req.user._id,
-      approved: false
     };
     // Save the new WightList document to the database
     WightList.create(newWightList)
