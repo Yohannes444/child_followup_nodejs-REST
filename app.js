@@ -18,7 +18,9 @@ var materialRouter = require ('./routes/materilaRouter')
 
 const cors=require('cors')
 const mongoose = require('mongoose');
-const studentRouter = require ('./routes/studentWightListRouter')
+const studentRouter = require ('./routes/studentWightListRouter');
+const attendance = require('./models/attendance');
+const attendanceRouter = require('./routes/attendanceRouter');
 
 const url = config.mongoUrl;
 const connect = mongoose.connect(url);
@@ -66,7 +68,7 @@ app.use('/cashier',cashierRouter)
 app.use('/teacher',teacherRouter)
 app.use('/wightlist',studentRouter)
 app.use('/classMatrial',materialRouter)
-
+app.use('/attendance',attendanceRouter)
 // catch 404 and forward to error handler
 
 app.use(function(req, res, next) {
