@@ -27,6 +27,6 @@ const assignmentSchema = new mongoose.Schema({
 }
 });
 
-const Assignment = mongoose.model('material', assignmentSchema);
+const Assignment = mongoose.model('assignment', assignmentSchema);
 
 module.exports = Assignment;

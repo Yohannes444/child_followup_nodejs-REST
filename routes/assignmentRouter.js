@@ -4,8 +4,9 @@ var WightList =require('../models/studentWignteList')
 var ClassRoom =require('../models/classRoom')
 var Student = require ('../models/student')
 var Material = require ('../models/classMaterial')
+var Assignment =require ('../models/assignmentModel')
 var authenticate=require('../authenticate')
-var MaterialRouter = express.Router();
+var AssignmentRouter = express.Router();
 var cors=require('./cors');
 const multer = require('multer');
 const mongoose = require('mongoose');
@@ -17,7 +18,7 @@ require('dotenv').config()
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/materials');
+        cb(null, 'public/Assignments');
     },
 
     filename: (req, files, cb) => {
@@ -34,12 +35,12 @@ const imageFileFilter = (req, files, cb) => {
 
 const upload = multer({ storage: storage, fileFilter: imageFileFilter});
 
-MaterialRouter.use(bodyParser.json())
+AssignmentRouter.use(bodyParser.json())
 
-MaterialRouter.route('/')
+AssignmentRouter.route('/')
 
 .get(cors.cors,authenticate.verifyUser,authenticate.verifyParent,(req,res,next)=>{
-    Material.find({})
+    Assignment.find({})
     .then((resp)=>{
             res.statusCode= 200
             res.setHeader('Content-Type', 'application/json');
@@ -50,34 +51,34 @@ MaterialRouter.route('/')
 
 .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyTeacher, upload.fields([{ name: 'file' }]), (req, res, next) => {
     try{
-
     // Extract the form data from the request
-    const { subject, description, teacher,classRoom } = req.body;
+    const { subject, description, teacher,classRoom, quation } = req.body;
   
     // Get the paths of the uploaded files
-    const materialPath = path.join('materials', req.files['file'][0].originalname).split(path.sep).join('/');
+    const quationFilePath = path.join('Assignments', req.files['file'][0].originalname).split(path.sep).join('/');
     const teacherId=mongoose.Types.ObjectId (teacher)
     const classRoomId = mongoose.Types.ObjectId(classRoom)
 
   
-    // Create a new Material document with the form data and file paths
-    const newMaterial =  {
-      subject:subject,
-      description:description,
-      classRoom: classRoomId,
-      teacher: teacherId,
-      file: materialPath,
+    // Create a new Assignment document with the form data and file paths
+    const newAssignment =  {
+        subject:subject,
+        description:description,
+        quation: quation,
+        quationFile:quationFilePath ,
+        classRoom: classRoomId,
+        teacher:teacherId
     };
-    // Save the new Material document to the database
-    Material.create(newMaterial)
-      .then(Material => {
+    // Save the new Assignment document to the database
+    Assignment.create(newAssignment)
+      .then(Assignment => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(Material);
+        res.json(Assignment);
       })
       .catch(err => next(err));
     } catch (err) {
         next(err);
       }
   })
-  module.exports = MaterialRouter
+  module.exports = AssignmentRouter
