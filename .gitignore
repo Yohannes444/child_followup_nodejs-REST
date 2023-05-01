@@ -13,3 +13,13 @@ public/materials/*.png
 public/materials/*.gif
 public/materials/*.pdf
 public/materials/*.ppt
+
+
+public/Assignments/*.jpg
+public/Assignments/*.jpeg
+public/Assignments/*.png
+public/Assignments/*.gif
+public/Assignments/*.pdf
+public/Assignments/*.ppt
+
+
