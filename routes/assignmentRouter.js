@@ -40,11 +40,23 @@ AssignmentRouter.use(bodyParser.json())
 AssignmentRouter.route('/')
 
 .get(cors.cors,authenticate.verifyUser,authenticate.verifyParent,(req,res,next)=>{
-    Assignment.find({})
-    .then((resp)=>{
-            res.statusCode= 200
-            res.setHeader('Content-Type', 'application/json');
-            res.json(resp)
+    Student.findById(req.body.childId) 
+    .then((resp)=>{ 
+
+        if(resp){ 
+            Assignment.find({classRoom:resp.section})
+            .then((resp)=>{
+
+                    res.statusCode= 200
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(resp)
+            })
+            .catch((err)=>next(err))
+        }else{ 
+            res.statusCode= 404, 
+            res.setHeader('Content-Type','application/json') 
+            res.end("ther is no child regsterd by this id") 
+        } 
     })
     .catch((err)=>next(err))
 })

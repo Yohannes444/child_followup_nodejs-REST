@@ -49,7 +49,7 @@ WightListRouter.route('/')
     .catch((err)=>next(err))
 })
 
-.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyParent, upload.fields([{ name: 'transcript' }, { name: 'receipt' }]), (req, res, next) => {
+.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyParent, upload.fields([{ name: 'transcript' }, { name: 'receipt' },{name:'photo'}]), (req, res, next) => {
     try{
 console.log(req.files)
     // Extract the form data from the request
@@ -58,6 +58,7 @@ console.log(req.files)
     // Get the paths of the uploaded files
     const transcriptPath = path.join('images', req.files['transcript'][0].originalname).split(path.sep).join('/');
 const receiptPath = path.join('images', req.files['receipt'][0].originalname).split(path.sep).join('/');
+const photoPath = path.join('images', req.files['photo'][0].originalname).split(path.sep).join('/')
     const selectedClassRooms=mongoose.Types.ObjectId (selectedClassRoom)
 
   
@@ -66,6 +67,7 @@ const receiptPath = path.join('images', req.files['receipt'][0].originalname).sp
       firstName:firstName,
       lastName:lastName,
       selectedClassRoom: selectedClassRooms,
+      photo:photoPath,
       transcript: transcriptPath,
       receipt: receiptPath,
       parent: req.user._id,
@@ -111,6 +113,7 @@ const receiptPath = path.join('images', req.files['receipt'][0].originalname).sp
       const newChild = new Student({
         firstName: student.firstName,
         lastName: student.lastName,
+        photo:student.photo,
         transcript: student.transcript,
         parent: student.parent._id,
         section: student.selectedClassRoom._id

@@ -1,6 +1,5 @@
 var express = require('express');
 var bodyParser =require('body-parser')
-var WightList =require('../models/studentWignteList')
 var ClassRoom =require('../models/classRoom')
 var Student = require ('../models/student')
 var Material = require ('../models/classMaterial')
@@ -39,13 +38,24 @@ MaterialRouter.use(bodyParser.json())
 MaterialRouter.route('/')
 
 .get(cors.cors,authenticate.verifyUser,authenticate.verifyParent,(req,res,next)=>{
-    Material.find({})
-    .then((resp)=>{
-            res.statusCode= 200
-            res.setHeader('Content-Type', 'application/json');
-            res.json(resp)
+    Student.findById(req.body.childId) 
+    .then((resp)=>{ 
+        if(resp){ 
+            Material.find({classRoom:resp.section})
+            .then((resp)=>{
+                    res.statusCode= 200
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(resp)
+            })
+            .catch((err)=>next(err))
+        }else{ 
+            res.statusCode= 404, 
+            res.setHeader('Content-Type','application/json') 
+            res.end("ther is no child regsterd by this id") 
+        } 
     })
     .catch((err)=>next(err))
+    
 })
 
 .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyTeacher, upload.fields([{ name: 'file' }]), (req, res, next) => {

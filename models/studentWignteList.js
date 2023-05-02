@@ -14,6 +14,10 @@ var StudentWightListSchema= new Schema({
         default:'',
          
     },
+    photo:{
+        type:String,
+        require
+    },
     transcript:{
         type:String,
          

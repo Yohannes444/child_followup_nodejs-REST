@@ -14,6 +14,10 @@ var ChildSchema= new Schema({
         default:'',
         require:true
     },
+    photo:{
+        type:String,
+        require
+    },
     transcript:{
         type:String,
         require:true

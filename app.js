@@ -17,11 +17,11 @@ var teacherRouter = require ('./routes/teacherRouter')
 var materialRouter = require ('./routes/materilaRouter')
 var assignmentRouter = require('./routes/assignmentRouter')
 var GradeRouter = require ('./routes/gradeRouter')
+var childRouter = require ('./routes/studentRouter')
 
 const cors=require('cors')
 const mongoose = require('mongoose');
 const studentRouter = require ('./routes/studentWightListRouter');
-const attendance = require('./models/attendance');
 const attendanceRouter = require('./routes/attendanceRouter');
 
 const url = config.mongoUrl;
@@ -73,6 +73,7 @@ app.use('/classMatrial',materialRouter)
 app.use('/attendance',attendanceRouter)
 app.use('/Assignment',assignmentRouter)
 app.use('/grade',GradeRouter)
+app.use('/child',childRouter)
 // catch 404 and forward to error handler
 
 app.use(function(req, res, next) {
