@@ -29,7 +29,8 @@ classRoomRouter.route('/')
             // document with the same className already exists
             res.statusCode = 400;
             res.setHeader('Content-Type', 'application/json');
-            res.json({message: 'Classroom with the same name already exists'});
+            const err = new Error("Classroom with the same name already exists")
+            return next(err)
         } else {
             // insert new document
             console.log(req.body)

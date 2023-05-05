@@ -16,6 +16,7 @@ require('dotenv').config()
 GradeRouter.use(bodyParser.json())
 
 GradeRouter.route('/')
+.options(cors.corsWithOptions,(req,res)=>{res.sendStatus(200)})
 
 .get(cors.cors,authenticate.verifyUser,authenticate.verifyParent,(req,res,next)=>{
     Grade.find({})
@@ -44,4 +45,39 @@ GradeRouter.route('/')
   }
 });   
     
+GradeRouter.route('/child')
+.options(cors.corsWithOptions,(req,res)=>{res.sendStatus(200)})
+
+.get(cors.cors, authenticate.verifyUser, authenticate.verifyParent, async (req, res, next) => {
+  try {
+    const studentId = req.query.studentId;
+  
+    // Find the grades for the specific student using the student ID
+    const grades = await Grade.find({ 'student.studentId': studentId });
+   console.lo
+    if (!grades || grades.length === 0) {
+      res.status(404);
+      const err = new Error("No grades found for the specified student");
+      throw err;
+    }
+  
+    // If grades are found for the specified student, extract the student object and return them
+    let studentGrades = [];
+    if (grades && grades.length > 0) {
+      studentGrades = grades.map((grade) => grade.student[0]);
+      
+    }
+  console.log(studentGrades)
+    res.status(200);
+    res.setHeader("Content-Type", "application/json");
+    res.json(studentGrades);
+  } catch (err) {
+    res.status(500);
+    next(err);
+  }
+  
+});
+
+
+
   module.exports = GradeRouter

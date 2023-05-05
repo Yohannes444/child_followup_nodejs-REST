@@ -24,7 +24,7 @@ const educationMaterialSchema = new mongoose.Schema({
         ref:'user',
 }
 });
-
+    
 const EducationMaterial = mongoose.model('material', educationMaterialSchema);
 
 module.exports = EducationMaterial;

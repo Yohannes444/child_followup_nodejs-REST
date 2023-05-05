@@ -70,7 +70,7 @@ exports.verifyCashier = (req,res,next)=>{
         if(req.user.active){
             next()
         }else{
-            var err = new Error('you are acoutn has bed disabled')
+            var err = new Error('you are acoutn has bad disabled')
             err.status= 403
             return next(err)
         }

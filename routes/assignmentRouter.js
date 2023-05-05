@@ -40,7 +40,7 @@ AssignmentRouter.use(bodyParser.json())
 AssignmentRouter.route('/')
 
 .get(cors.cors,authenticate.verifyUser,authenticate.verifyParent,(req,res,next)=>{
-    Student.findById(req.body.childId) 
+    Student.findById(req.query.studentId) 
     .then((resp)=>{ 
 
         if(resp){ 
@@ -55,7 +55,9 @@ AssignmentRouter.route('/')
         }else{ 
             res.statusCode= 404, 
             res.setHeader('Content-Type','application/json') 
-            res.end("ther is no child regsterd by this id") 
+            const err = new Error("ther is no child regsterd by this id")
+            return next(err)
+         
         } 
     })
     .catch((err)=>next(err))
@@ -93,4 +95,5 @@ AssignmentRouter.route('/')
         next(err);
       }
   })
-  module.exports = AssignmentRouter
+  
+  module.exports = AssignmentRouter  

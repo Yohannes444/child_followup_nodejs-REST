@@ -20,7 +20,8 @@ teacherRouter.route('/')
         }else{
             res.statusCode= 404,
             res.setHeader('Content-Type','application/json')
-            res.end("ther is no user regsterd")
+            const err = new Error("ther is no user regsterd")
+            return next(err)
         }
     })
 })
@@ -40,12 +41,14 @@ teacherRouter.route('/:teacherId')
             }else{
                 res.statusCode= 403,
                 res.setHeader('Content-Type','application/json')
-                res.end("ther is user is not tacher")
+                const err = new Error("ther is user is not tacher")
+                return next(err)
             }
         }else{
             res.statusCode= 404,
             res.setHeader('Content-Type','application/json')
-            res.end("ther is no user regsterd")
+            const err = new Error("ther is no user regsterd")
+            return next(err)
         }
     })
 })
@@ -80,7 +83,8 @@ teacherRouter.route('/:teacherId')
 })
 .delete(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyAdmin,(req, res, next) => {
     res.statusCode = 403;
-    res.end('delete operation not supported on /:teacherId/'+ req.params.teacherId);
+    const err = new Error('delete operation not supported on /:teacherId/'+ req.params.teacherId)
+     return next(err)
 })
 
 
@@ -92,12 +96,14 @@ teacherRouter.route('/:teacherId/active')
 
 .get(cors.cors,authenticate.verifyUser,authenticate.verifyAdmin,(req,res)=>{
     res.statusCode = 403;
-    res.end('get operation not supported on /:teacherId/active'+ req.params.teacherId);
+    const err = new Error('get operation not supported on /:teacherId/active'+ req.params.teacherId)
+     return next(err)
 })
 
 .post(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyAdmin,(req, res, next) => {
     res.statusCode = 403;
-    res.end('POST operation not supported on /:teacherId/active'+ req.params.teacherId);
+    const err = new Error('POST operation not supported on /:teacherId/active'+ req.params.teacherId)
+     return next(err)
 })
 
 .put(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyAdmin, async (req, res) => {
@@ -105,11 +111,15 @@ teacherRouter.route('/:teacherId/active')
   try {
     const user = await User.findById(id)
     if (!user) {
-      return res.status(404).json({ message: 'User not found by me' })
+      res.status=404
+      const err = new Error('User not found by me')
+      return next(err)
     }
 
     if (!user.teacher) {
-      return res.status(403).json({ message: 'Forbidden' })
+      res.status=403
+      const err = new Error('Forbidden')
+      return next(err)
     }
 
     user.active = !user.active
@@ -118,12 +128,15 @@ teacherRouter.route('/:teacherId/active')
     return res.status(200).json(updatedUser)
   } catch (error) {
     console.error(error)
-    return res.status(500).json({ message: 'Server error' })
+      res.status=500
+      const err = new Error('Server error')
+      return next(err)
   }
 })
 .delete(cors.corsWithOptions,authenticate.verifyUser,authenticate.verifyAdmin,(req,res)=>{
     res.statusCode = 403;
-    res.end('delete operation not supported on /:teacherId/active'+ req.params.teacherId);
+    const err = new Error('delete operation not supported on /:teacherId/active'+ req.params.teacherId)
+    return next(err)
 })
 
 module.exports = teacherRouter

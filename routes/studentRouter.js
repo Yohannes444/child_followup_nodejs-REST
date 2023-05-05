@@ -20,7 +20,8 @@ studentrouter.route('/')
         }else{ 
             res.statusCode= 404, 
             res.setHeader('Content-Type','application/json') 
-            res.end("ther is no chidl regsterd by this id ") 
+            const err = new Error("ther is no chidl regsterd by this id ")
+            return next(err)
             
         } 
     })

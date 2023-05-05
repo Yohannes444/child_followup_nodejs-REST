@@ -38,7 +38,7 @@ MaterialRouter.use(bodyParser.json())
 MaterialRouter.route('/')
 
 .get(cors.cors,authenticate.verifyUser,authenticate.verifyParent,(req,res,next)=>{
-    Student.findById(req.body.childId) 
+    Student.findById(req.query.studentId) 
     .then((resp)=>{ 
         if(resp){ 
             Material.find({classRoom:resp.section})
@@ -51,7 +51,8 @@ MaterialRouter.route('/')
         }else{ 
             res.statusCode= 404, 
             res.setHeader('Content-Type','application/json') 
-            res.end("ther is no child regsterd by this id") 
+            const err = new Error("ther is no child regsterd by this id")
+            return next(err)
         } 
     })
     .catch((err)=>next(err))

@@ -57,8 +57,8 @@ console.log(req.files)
   
     // Get the paths of the uploaded files
     const transcriptPath = path.join('images', req.files['transcript'][0].originalname).split(path.sep).join('/');
-const receiptPath = path.join('images', req.files['receipt'][0].originalname).split(path.sep).join('/');
-const photoPath = path.join('images', req.files['photo'][0].originalname).split(path.sep).join('/')
+    const receiptPath = path.join('images', req.files['receipt'][0].originalname).split(path.sep).join('/');
+    const photoPath = path.join('images', req.files['photo'][0].originalname).split(path.sep).join('/')
     const selectedClassRooms=mongoose.Types.ObjectId (selectedClassRoom)
 
   
@@ -123,12 +123,16 @@ const photoPath = path.join('images', req.files['photo'][0].originalname).split(
        const classRoom = await ClassRoom.findById(student.selectedClassRoom._id).populate('StudentsList');
 
        if (!classRoom) {
-         return res.status(404).json({ error: 'Class room not found' });
+            res.status=404
+            const err = new Error("Class room not found")
+            return next(err)
        }
  
        // Check if class room is full
        if (classRoom.StudentsList.length >= classRoom.classSize) {
-         return res.status(400).json({ error: 'Class room is full' });
+            res.status=400
+            const err = new Error("Class room is full")
+            return next(err)
        }
 
       const createdChild = await newChild.save();
@@ -192,7 +196,8 @@ WightListRouter.route('/freeSpace')
     .catch((err) => {
       res.status(500);
       res.setHeader('Content-Type', 'application/json');
-      res.json({ error: err });
+      return next(err)
+     
     });
 })
 module.exports = WightListRouter

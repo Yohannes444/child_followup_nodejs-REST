@@ -20,7 +20,8 @@ cashierRouter.route('/')
         }else{
             res.statusCode= 404,
             res.setHeader('Content-Type','application/json')
-            res.end("ther is no user regsterd")
+            const err = new Error("ther is no user regsterd")
+            return next(err)
         }
     })
 })
@@ -42,12 +43,14 @@ cashierRouter.route('/:cashierId')
             }else{
                 res.statusCode= 403,
                 res.setHeader('Content-Type','application/json')
-                res.end("ther is user is not chasier")
+                const err = new Error("ther is user is not chasier")
+                return next(err)
             }
         }else{
             res.statusCode= 404,
             res.setHeader('Content-Type','application/json')
-            res.end("ther is no user regsterd")
+            const err = new Error("ther is no user regsterd")
+            return next(err)
         }
     })
 })

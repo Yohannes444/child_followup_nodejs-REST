@@ -17,7 +17,8 @@ adminrouter.route('/')
         }else{
             res.statusCode= 200,
             res.setHeader('Content-Type','application/json')
-            res.json(resp)
+            const err = new Error("go handl the error")
+            return next(err)
         }
     })
 })
