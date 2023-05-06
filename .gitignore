@@ -23,3 +23,7 @@ public/Assignments/*.pdf
 public/Assignments/*.ppt
 
 
+public/receiptes/*.jpg
+public/receiptes/*.jpeg
+public/receiptes/*.png
+public/receiptes/*.gif

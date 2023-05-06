@@ -29,7 +29,6 @@ GradeRouter.route('/')
 })
 
 .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyTeacher, async(req, res, next) => {
-  console.log(req.body)
   const { semester, student, date } = req.body;
   try {
     const newGrade = new Grade({
@@ -54,7 +53,6 @@ GradeRouter.route('/child')
   
     // Find the grades for the specific student using the student ID
     const grades = await Grade.find({ 'student.studentId': studentId });
-   console.lo
     if (!grades || grades.length === 0) {
       res.status(404);
       const err = new Error("No grades found for the specified student");
@@ -67,7 +65,6 @@ GradeRouter.route('/child')
       studentGrades = grades.map((grade) => grade.student[0]);
       
     }
-  console.log(studentGrades)
     res.status(200);
     res.setHeader("Content-Type", "application/json");
     res.json(studentGrades);
