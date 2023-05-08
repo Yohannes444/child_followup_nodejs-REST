@@ -94,7 +94,9 @@ console.log(req.files)
     const student = await WightList.findById(id).populate('selectedClassRoom').populate('parent');
 
     if (!student) {
-      return res.status(404).json({ error: 'Student not found in weight list' });
+      const error = new Error( 'Student not found in weight list')
+      res.status(404)
+      return next(error)   
     }
 
     // Send email to the parent
@@ -148,7 +150,7 @@ console.log(req.files)
         from: 'yohannesmulat444@gmail.com',
         to: student.parent.email,
         subject: 'Registration approved',
-        text: `Dear ${student.parent.firstName},\n\nWe are pleased to inform you that your child's registration has been approved. Your child has been enrolled in ${student.selectedClassRoom.className} and their student ID is ${createdChild._id}.\n\nBest regards,\n\nThe Child Education Follow Up team`
+        text: `ውድ ${student.parent.firstName}፣\n\nየልጅዎ ምዝገባ ተቀባይነት ማግኘቱን ለማሳወቅ እንወዳለን። ልጅዎ በ${student.selectedClassRoom.className} ተመዝግቧል እና የተማሪ መታወቂያቸው ${createdChild._id} ነው።\n\nከሠላምታ ጋር፣\n\nየልጆች ትምህርት ክትትል ቡድን'`
       };
       await WightList.findByIdAndRemove(id);
     } else {
@@ -160,7 +162,7 @@ console.log(req.files)
         from: 'yohannesmulat444@gmail.com',
         to: student.parent.email,
         subject: 'Registration rejected',
-        text: `Dear ${student.parent.firstName},\n\nWe regret to inform you that your child's registration has been rejected. We appreciate your interest in our program and encourage you to try again in the future.\n\nBest regards,\n\nThe Child Education Follow Up team`
+        text: `ውድ ${student.parent.firstName}፣\n\nየልጅዎ ምዝገባ ውድቅ መደረጉን ስናሳውቅዎ እናዝናለን። ለፕሮግራማችን ያላችሁን ፍላጎት እናደንቃለን ወደፊትም እንድትሞክሩ እናበረታታዎታለን።\n\nከሠላምታ ጋር፣\n\nየህፃናት ትምህርት ክትትል ቡድን`
       };
     }
 

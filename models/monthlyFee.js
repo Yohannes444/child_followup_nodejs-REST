@@ -7,9 +7,18 @@ var MonthlyFee = new Schema({
           default: '',
           require:true
       },
+      studentId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'child',
+        require:true
+      },
       approved: {
         type: Boolean,
         default: false,
+      },
+      date:{
+        type:Date,
+        require:true
       }
 });
 
