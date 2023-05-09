@@ -13,6 +13,8 @@ classRoomRouter.route('/')
 
 .get(cors.cors,authenticate.verifyUser,authenticate.verifyAdmin,(req,res,next)=>{
     ClassRoom.find()
+    .populate('teachersList')
+    .populate('StudentsList')
     .then((resp)=>{
             res.statusCode= 200
             res.setHeader('Content-Type', 'application/json');
