@@ -31,10 +31,12 @@ GradeRouter.route('/')
 .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyTeacher, async(req, res, next) => {
   const { semester, student, date } = req.body;
   try {
+    const teacherId = req.user._id;
+    const gradedStudents = student.map(s => ({...s,teacherId:teacherId}));
     const newGrade = new Grade({
-      semester:semester,
-      student:student,
-      date:date,
+      semester,
+      student: gradedStudents,
+      date,
     });
     const savedGrade = await newGrade.save();
     res.status(200).json(savedGrade);
@@ -42,7 +44,9 @@ GradeRouter.route('/')
     console.error(err);
     res.status(500).send('Server error');
   }
-});   
+});
+
+
     
 GradeRouter.route('/child')
 .options(cors.corsWithOptions,(req,res)=>{res.sendStatus(200)})
@@ -50,20 +54,17 @@ GradeRouter.route('/child')
 .get(cors.cors, authenticate.verifyUser, authenticate.verifyParent, async (req, res, next) => {
   try {
     const studentId = req.query.studentId;
-  
     // Find the grades for the specific student using the student ID
     const grades = await Grade.find({ 'student.studentId': studentId });
     if (!grades || grades.length === 0) {
       res.status(404);
       const err = new Error("No grades found for the specified student");
-      throw err;
+      next(err);
     }
-  
-    // If grades are found for the specified student, extract the student object and return them
+    // If grades are found for the specified student, extract the student object and return them  6450c4f7a4b86f2eb7c21b4e
     let studentGrades = [];
     if (grades && grades.length > 0) {
       studentGrades = grades.map((grade) => grade.student[0]);
-      
     }
     res.status(200);
     res.setHeader("Content-Type", "application/json");

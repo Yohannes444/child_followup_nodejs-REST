@@ -1,10 +1,18 @@
 const mongoose = require('mongoose');
-
 const gradingSystemSchema = new mongoose.Schema({
   student:[{
     studentId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'child',
+      required: true
+    },
+    teacherId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+      required: true
+    },
+    subject: {
+      type: String,
       required: true
     },
     assessment: {
@@ -25,7 +33,7 @@ const gradingSystemSchema = new mongoose.Schema({
       min: 0,
       max: 15
     },
-     finalExam: {
+    finalExam: {
       type: String,
       required: true,
       min: 0,
@@ -41,7 +49,7 @@ const gradingSystemSchema = new mongoose.Schema({
     type: Date,
     required: true
   }
-
 });
+
 
 module.exports = mongoose.model('Grade', gradingSystemSchema);

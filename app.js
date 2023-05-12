@@ -19,6 +19,8 @@ var assignmentRouter = require('./routes/assignmentRouter')
 var GradeRouter = require ('./routes/gradeRouter')
 var childRouter = require ('./routes/studentRouter')
 var monthlyFeeRouter = require('./routes/monthlyFeeRouter')
+var ChatRoute =require('./routes/ChatRoute')
+var MessageRoute=require('./routes/MessageRoute')
 const cors=require('cors')
 const mongoose = require('mongoose');
 const studentRouter = require ('./routes/studentWightListRouter');
@@ -75,6 +77,8 @@ app.use('/Assignment',assignmentRouter)
 app.use('/grade',GradeRouter)
 app.use('/child',childRouter)
 app.use('/monthlyFee',monthlyFeeRouter)
+app.use('/chat', ChatRoute)
+app.use('/message', MessageRoute)
 // catch 404 and forward to error handler
 
 app.use(function(req, res, next) {

@@ -30,7 +30,8 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^5.0.1",
     "path": "^0.12.7",
-    "session-file-store": "^1.2.0"
+    "session-file-store": "^1.2.0",
+    "socket.io": "^4.5.3"
   },
   "author": "Yohannnes Mulat, Dawit twodros, Andebet sisay",
   "license": "ISC"
