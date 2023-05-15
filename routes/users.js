@@ -203,5 +203,18 @@ router.route('/admin/cashier')
 
 })
 
+router.route('/userInfo')
+.options(cors.corsWithOptions,(req,res)=>{res.sendStatus(200)})
+
+.get(cors.corsWithOptions, authenticate.verifyUser,(req,res,next) => {
+  user.findOne({_id:req.query.userId})
+  .then((user) => {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.json(user);
+  }, (err) => next(err))
+  .catch((err) => next(err));
+});
+
 module.exports = router;
  

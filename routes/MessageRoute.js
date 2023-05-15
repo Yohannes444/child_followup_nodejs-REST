@@ -13,7 +13,7 @@ massegRouter.route('/')
 .options(cors.corsWithOptions,(req,res)=>{res.sendStatus(200)})
 
 .post(cors.corsWithOptions,authenticate.verifyUser,async (req, res) => {
-    const { chatId, senderId, text } = req.body;
+    const { chatId, senderId, text } = req.body.message;
     const message = new MessageModel({
       chatId,
       senderId,
@@ -25,15 +25,14 @@ massegRouter.route('/')
     } catch (error) {
       res.status(500).json(error);
     }
-  });
+  })
 
-massegRouter.route("/:chatId")
-.options(cors.corsWithOptions,(req,res)=>{res.sendStatus(200)})
 
 .get(cors.cors,authenticate.verifyUser, async (req, res) => {
-    const { chatId } = req.params;
+    const  chatId  =req.query.userId;
     try {
       const result = await MessageModel.find({ chatId });
+      console.log(result)
       res.status(200).json(result);
     } catch (error) {
       res.status = 500;
