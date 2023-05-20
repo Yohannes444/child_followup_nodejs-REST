@@ -4,55 +4,66 @@ var user =require('../models//user')
 var authenticate=require('../authenticate')
 var passport=require('passport');
 var router = express.Router();
+const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var cors=require('./cors')
+const nodemailer =require('nodemailer')
+require('dotenv').config()
+const config = require('../config.js');
+
+
 router.use(bodyParser.json())
 /* GET users listing. */
-router.get('/',cors.corsWithOptions, authenticate.verifyUser,(req,res,next) => {
-  user.findOne({_id:req.user._id})
-  .then((cashier) => {
-      res.statusCode = 200;
-      res.setHeader('Content-Type', 'application/json');
-      res.json(cashier);
-  }, (err) => next(err))
-  .catch((err) => next(err));
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: "yohannesmulat444@gmail.com",
+    pass: process.env.GMAIL_PASSWORD
+  }
 });
 
-router.post('/signup',cors.corsWithOptions, (req, res,next) => {
-  console.log(req.body)
-  user.register(new user({username: req.body.username}),
-  req.body.password,(err,user) => {
-    if(err) {
-      res.statusCode = 500;
-      res.setHeader('Content-Type', 'application/json');
-      res.json({err:err})
-      
-    }
-    else {
-      if (req.body.firstName)
-        user.firstName = req.body.firstName;
-        
-      if (req.body.lastName)
-        user.lastName = req.body.lastName;
-      if(req.body.email)
-        user.email =req.body.email
-        user.save((err, user) => {
-          if (err) {
-            res.statusCode = 500;
-            res.setHeader('Content-Type', 'application/json');
-            res.json({err: err});
-            next(err)
-            return ;
-          }
-          passport.authenticate('local')(req, res, () => {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'application/json');
-            res.json({success: true, status: 'Registration Successful!'});
-          });
-        })
-    }
-  })
+router.post('/signup', cors.corsWithOptions, async (req, res, next) => {
+  try {
+    const registeredUser = await user.register(new user({
+      username: req.body.username,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      active: false 
+    }), req.body.password);
+    // Generate email verification token
+    const emailToken = await jwt.sign({ userId: registeredUser._id }, config.secretKey, { expiresIn: '1d' });
 
+    // Create verification URL
+    const verificationURL = `https://localhost:3443/users/confirmation/${emailToken}`;
+
+    // Send verification email
+    transporter.sendMail({
+      to: registeredUser.email,
+      subject: 'Confirm Email',
+      html: `Please click the following link to confirm your email: <a href="${verificationURL}">${verificationURL}</a>`,
+    });
+
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json({ success: true, status: 'Registration Successful!' })
+  } catch (err) {
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'application/json');
+    res.json({ err: err.message });
+  }
 });
+router.get('/confirmation/:token', async (req, res) => {
+  try {
+    const { userId } = await jwt.verify(req.params.token,config.secretKey);
+    await user.updateOne({ _id: userId }, { active: true });
+    res.redirect('http://localhost:3000/home');
+  } catch (err) {
+    res.send('Error confirming email');
+  }
+});
+
+
+
 
 router.post('/login',cors.corsWithOptions, (req,res,next) => {
   passport.authenticate('local',(err,user,info)=>{

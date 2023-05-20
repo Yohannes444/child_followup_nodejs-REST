@@ -6,9 +6,6 @@ var cors=require('./cors');
 const massegRouter = express.Router();
 massegRouter.use(bodyParser.json())
 
-
-
-
 massegRouter.route('/')
 .options(cors.corsWithOptions,(req,res)=>{res.sendStatus(200)})
 
@@ -32,7 +29,6 @@ massegRouter.route('/')
     const  chatId  =req.query.userId;
     try {
       const result = await MessageModel.find({ chatId });
-      console.log(result)
       res.status(200).json(result);
     } catch (error) {
       res.status = 500;
