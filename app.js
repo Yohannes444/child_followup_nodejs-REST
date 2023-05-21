@@ -25,6 +25,7 @@ const cors=require('cors')
 const mongoose = require('mongoose');
 const studentRouter = require ('./routes/studentWightListRouter');
 const attendanceRouter = require('./routes/attendanceRouter');
+const FeedBackRouter = require('./routes/FeedBackRouter')
 
 const url = config.mongoUrl;
 const connect = mongoose.connect(url);
@@ -60,7 +61,7 @@ app.use(passport.initialize())
 app.use('/', indexRouter);
 //<<<<<<< Updated upstream
 app.use('/users', usersRouter);
-
+app.use('/feedback',FeedBackRouter)
 //=======
 app.use('/git ', usersRouter);
 //>>>>>>> Stashed changes

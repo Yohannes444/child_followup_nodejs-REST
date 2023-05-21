@@ -40,7 +40,11 @@ const gradingSystemSchema = new mongoose.Schema({
       max: 50
     }    
   }],
- 
+  classroomId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Classroom',
+    required: true
+  },
   semester: {
     type: String,
     required: true

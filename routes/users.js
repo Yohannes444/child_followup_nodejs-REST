@@ -21,6 +21,16 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+router.get('/',cors.corsWithOptions, authenticate.verifyUser,(req,res,next) => {
+  user.findOne({_id:req.user._id})
+  .then((cashier) => {
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.json(cashier);
+  }, (err) => next(err))
+  .catch((err) => next(err));
+});
+
 router.post('/signup', cors.corsWithOptions, async (req, res, next) => {
   try {
     const registeredUser = await user.register(new user({

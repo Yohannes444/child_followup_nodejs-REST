@@ -18,18 +18,37 @@ GradeRouter.use(bodyParser.json())
 GradeRouter.route('/')
 .options(cors.corsWithOptions,(req,res)=>{res.sendStatus(200)})
 
-.get(cors.cors,authenticate.verifyUser,authenticate.verifyParent,(req,res,next)=>{
-    Grade.find({})
-    .then((resp)=>{
-            res.statusCode= 200
-            res.setHeader('Content-Type', 'application/json');
-            res.json(resp)
-    })
-    .catch((err)=>next(err))
+.get(cors.cors, authenticate.verifyUser, authenticate.verifyTeacher, async (req, res, next) => {
+  const classroomId = req.query.classId;
+  const teacherId = req.user._id;
+  try {
+    const grades = await Grade.find({ classroomId: classroomId, 'student.teacherId': teacherId }).populate('student.studentId');
+    
+    if (!grades || grades.length === 0) {
+      res.status(404);
+      const err = new Error("No grades found for the specified student");
+      return next(err);
+    }
+    
+    let studentGrades = [];
+    if (grades && grades.length > 0) {
+      studentGrades = grades.map((grade) => grade.student[0]);
+    }
+    
+    console.log(studentGrades);
+    res.status(200);
+    res.setHeader("Content-Type", "application/json");
+    res.json(studentGrades);
+  } catch (err) {
+    res.status(404);
+    return next(err);
+  }
 })
 
+             
+
 .post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyTeacher, async(req, res, next) => {
-  const { semester, student, date } = req.body;
+  const { semester, student, date,classroomId} = req.body;
   try {
     const teacherId = req.user._id;
     const gradedStudents = student.map(s => ({...s,teacherId:teacherId}));
@@ -37,6 +56,7 @@ GradeRouter.route('/')
       semester,
       student: gradedStudents,
       date,
+      classroomId
     });
     const savedGrade = await newGrade.save();
     res.status(200).json(savedGrade);
@@ -45,7 +65,6 @@ GradeRouter.route('/')
     res.status(500).send('Server error');
   }
 });
-
 
     
 GradeRouter.route('/child')
