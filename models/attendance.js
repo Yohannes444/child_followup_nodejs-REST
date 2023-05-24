@@ -16,6 +16,10 @@ const attendanceSchema = new mongoose.Schema({
       ref: 'child',
       required: true
     },
+    teacherId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+      required: true},
     present: {
       type: Boolean,
       required: true

@@ -32,7 +32,7 @@ GradeRouter.route('/')
     
     let studentGrades = [];
     if (grades && grades.length > 0) {
-      studentGrades = grades.map((grade) => grade.student[0]);
+      studentGrades = grades.map((grade) => grade.student);
     }
     
     console.log(studentGrades);

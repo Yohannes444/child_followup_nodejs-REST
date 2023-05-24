@@ -74,34 +74,45 @@ router.get('/confirmation/:token', async (req, res) => {
 
 
 
-
-router.post('/login',cors.corsWithOptions, (req,res,next) => {
-  passport.authenticate('local',(err,user,info)=>{
-    if(err){
-      return next(err)
+router.post('/login', cors.corsWithOptions, (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      return next(err);
     }
-    if(!user){
+    if (!user) {
       res.statusCode = 401;
       res.setHeader('Content-Type', 'application/json');
-      res.json({success:false ,status: 'your loging unsuccessfuly ',err:info});
-    }else{
-      req.logIn(user,(err)=>{
-        if(err){
+      res.json({ success: false, status: 'Your login was unsuccessful', err: info });
+    } else {
+      req.logIn(user, (err) => {
+        if (err) {
           res.statusCode = 401;
           res.setHeader('Content-Type', 'application/json');
-          res.json({success:false  ,status: 'liging unsuccessfuly ',err:'cold not login user'});
+          res.json({ success: false, status: 'Login unsuccessful', err: 'Could not log in user' });
         }
-        var token =authenticate.getToken({_id:req.user._id})
+
+        if (!user.active) {
+          res.statusCode = 401;
+          res.setHeader('Content-Type', 'application/json');
+          res.json({ success: false, status: 'you have not verify your email or you account hase beend desabled', message: 'Please verify your email' });
+          return;
+        }
+
+        var token = authenticate.getToken({ _id: req.user._id });
         const { _id, firstName, lastName, email, parent, admin, teacher, cashier } = req.user;
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json({success:true,token:token ,status: 'you are logd in successfuly ', user: { _id, firstName, lastName, email, parent, admin, teacher, cashier } });
-      })
+        res.json({
+          success: true,
+          token: token,
+          status: 'You are logged in successfully',
+          user: { _id, firstName, lastName, email, parent, admin, teacher, cashier }
+        });
+      });
     }
-    
-  })(req,res,next)
+  })(req, res, next);
+});
 
-})
 
 router.get('/logout',cors.corsWithOptions, (req, res,next) => {
   if (req.session) {

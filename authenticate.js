@@ -41,7 +41,7 @@ exports.verifyUser = passport.authenticate('jwt', {session: false});
 
 exports.verifyParent=(req,res,next)=>{
     if(req.user.parent){
-        if(req.user.active){
+        if(req.user.active === true){
             next()
         }else{
             var err = new Error('plies verifie your emal account')
