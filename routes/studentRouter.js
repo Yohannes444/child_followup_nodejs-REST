@@ -6,6 +6,7 @@ var ClassRoom = require('../models/classRoom')
 var studentrouter = express.Router();
 var cors=require('./cors');
 studentrouter.use(bodyParser.json())
+
 studentrouter.route('/')
 
 .get(cors.cors,authenticate.verifyUser,authenticate.verifyParent,(req,res,next)=>{ 
@@ -29,5 +30,25 @@ studentrouter.route('/')
 })
 
 
+studentrouter.route('/all')
+.get(cors.cors, authenticate.verifyUser, authenticate.verifyCashier, async (req, res, next) => {
+    try {
+        const AllStudents = await Student.find().populate('section')
+
+        if (AllStudents) {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(AllStudents);
+        } else {
+            res.statusCode = 404;
+            res.setHeader('Content-Type', 'application/json');
+            const err = new Error("There are no unapproved monthly fees.");
+            return next(err);
+        }
+    } catch (error) {
+        console.error(error);
+        next(error)
+    }
+})
 
 module.exports = studentrouter

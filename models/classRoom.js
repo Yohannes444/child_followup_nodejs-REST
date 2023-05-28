@@ -20,6 +20,9 @@ var classRoom = new Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'child'
     }]
+},
+{
+  timestamps: true,
 })
 
 var ClassRoom =  mongoose.model('Classroom',classRoom)

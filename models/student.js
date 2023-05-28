@@ -36,6 +36,9 @@ var ChildSchema= new Schema({
         require:true
     },
     
+},
+{
+  timestamps: true,
 })
 
 module.exports = mongoose.model('child',ChildSchema)

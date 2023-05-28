@@ -91,4 +91,25 @@ MaterialRouter.route('/')
         next(err);
       }
   })
+
+  MaterialRouter.route('/all')
+
+  .get(cors.cors,authenticate.verifyUser,authenticate.verifyAdmin,(req,res,next)=>{
+    Material.find() 
+    .then((resp)=>{ 
+        if(resp){ 
+            res.statusCode= 200
+            res.setHeader('Content-Type', 'application/json');
+            res.json(resp)
+           
+        }else{ 
+            res.statusCode= 404, 
+            res.setHeader('Content-Type','application/json') 
+            const err = new Error("ther is no marerial add in the database")
+            return next(err)
+        } 
+    })
+    .catch((err)=>next(err))
+    
+})
   module.exports = MaterialRouter

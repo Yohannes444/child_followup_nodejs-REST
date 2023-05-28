@@ -20,6 +20,9 @@ var MonthlyFee = new Schema({
         type:Date,
         require:true
       }
+},
+{
+  timestamps: true,
 });
 
 module.exports = mongoose.model('monthlyFeeReceipt', MonthlyFee);

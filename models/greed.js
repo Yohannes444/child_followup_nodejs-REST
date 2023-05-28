@@ -18,18 +18,21 @@ const gradingSystemSchema = new mongoose.Schema({
     assessment: {
       type: String,
       required: true,
+      default:0,
       min: 0,
       max: 30
     },
     quiz: {
       type: String,
       required: true,
+      default:0,
       min: 0,
       max: 5
     },
     midExam: {
       type: String,
       required: true,
+      default:0,
       min: 0,
       max: 15
     },
@@ -37,6 +40,7 @@ const gradingSystemSchema = new mongoose.Schema({
       type: String,
       required: true,
       min: 0,
+      default:0,
       max: 50
     }    
   }],
@@ -53,6 +57,9 @@ const gradingSystemSchema = new mongoose.Schema({
     type: Date,
     required: true
   }
+},
+{
+  timestamps: true,
 });
 
 

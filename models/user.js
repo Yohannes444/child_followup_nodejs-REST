@@ -40,6 +40,9 @@ var User = new Schema({
       default:true
     }
 
+},
+{
+  timestamps: true,
 });
 User.plugin(passportLocalMongoose)
 

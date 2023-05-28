@@ -150,4 +150,26 @@ monthlyFeeRouter.route('/')
   
   })
   
+
+  monthlyFeeRouter.route('/all')
+.get(cors.cors, authenticate.verifyUser, authenticate.verifyCashier, async (req, res, next) => {
+    try {
+        const monthlyFees = await MonthlyFee.find().populate('studentId')
+
+        if (monthlyFees) {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(monthlyFees);
+        } else {
+            res.statusCode = 404;
+            res.setHeader('Content-Type', 'application/json');
+            const err = new Error("There are no unapproved monthly fees.");
+            return next(err);
+        }
+    } catch (error) {
+        console.error(error);
+        next(error)
+    }
+})
+
 module.exports = monthlyFeeRouter

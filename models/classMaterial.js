@@ -23,6 +23,9 @@ const educationMaterialSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'user',
 }
+},
+{
+  timestamps: true,
 });
     
 const EducationMaterial = mongoose.model('material', educationMaterialSchema);
