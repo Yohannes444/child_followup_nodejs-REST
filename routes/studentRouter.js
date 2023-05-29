@@ -11,7 +11,7 @@ studentrouter.route('/')
 
 .get(cors.cors,authenticate.verifyUser,authenticate.verifyParent,(req,res,next)=>{ 
   
-    Student.find({parent:req.user._id}) 
+    Student.find({ parent: req.user._id }).populate('section', ['className', 'createdAt'])
     .then((resp)=>{ 
         if(resp){ 
 
