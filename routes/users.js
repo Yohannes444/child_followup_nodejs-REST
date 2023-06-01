@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser =require('body-parser')
+var ClassRoom =require('../models/classRoom')
 var user =require('../models//user')
 var authenticate=require('../authenticate')
 var passport=require('passport');
@@ -29,6 +30,41 @@ router.get('/',cors.corsWithOptions, authenticate.verifyUser,(req,res,next) => {
       res.json(cashier);
   }, (err) => next(err))
   .catch((err) => next(err));
+});
+router.delete('/teacher', cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+  const teacherId = req.query.teacherId;
+
+  user.findByIdAndDelete(teacherId)
+    .then((deletedUser) => {
+      if(deletedUser != null){
+      // Find and update only the class rooms where the deleted teacher ID is present
+      return ClassRoom.updateMany({ teachersList: teacherId }, { $pull: { teachersList: teacherId } })
+        .then((updateResult) => {
+          res.setHeader('Content-Type', 'application/json');
+          res.status(200).json({ deletedUser, updateResult });
+        });}
+        else{
+          const err = new Error('User not found');
+          err.status = 404;
+          next(err)
+        }
+    })
+    .catch((err) => next(err));
+});
+router.delete('/cashier', cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+  const cashierId = req.query.cashierId;
+  user.findByIdAndDelete(cashierId)
+    .then((deletedUser) => {
+      if(deletedUser != null){
+          res.setHeader('Content-Type', 'application/json');
+          res.status(200).json({ deletedUser});}
+          else{
+            const err = new Error('User not found');
+            err.status = 404;
+            next(err)
+          }
+    })
+    .catch((err) => next(err));
 });
 
 router.post('/signup', cors.corsWithOptions, async (req, res, next) => {

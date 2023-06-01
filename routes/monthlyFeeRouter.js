@@ -133,6 +133,7 @@ monthlyFeeRouter.route('/')
           subject: 'Registration rejected',
           text: `ውድ ${student.parent.firstName}፣\n\n በ ቀን ${monthelyFee.date} የከፈ ሉት የትምህርትበት ወርሃዊ ክፍያ ውድቅ ስለተደረገ በአካል መተው መክፈልወትን እንድታረጋግጡ ስንል እናሳስባለን።\n\nከሠላምታ ጋር፣\n\nየህፃናት ትምህርት ክትትል ቡድን`
         };
+        await MonthlyFee.findByIdAndRemove(id)
       }
   
       transporter.sendMail(mailOptions, (error, info) => {
