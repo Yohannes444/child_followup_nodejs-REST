@@ -77,7 +77,7 @@ router.post('/signup', cors.corsWithOptions, async (req, res, next) => {
       active: false 
     }), req.body.password);
     // Generate email verification token
-    const emailToken = await jwt.sign({ userId: registeredUser._id }, config.secretKey, { expiresIn: '1d' });
+    const emailToken = await jwt.sign({ userId: registeredUser._id }, process.env.SECRETKEY, { expiresIn: '1d' });
 
     // Create verification URL
     const verificationURL = `https://localhost:3443/users/confirmation/${emailToken}`;
@@ -100,7 +100,7 @@ router.post('/signup', cors.corsWithOptions, async (req, res, next) => {
 });
 router.get('/confirmation/:token', async (req, res) => {
   try {
-    const { userId } = await jwt.verify(req.params.token,config.secretKey);
+    const { userId } = await jwt.verify(req.params.token,process.env.SECRETKEY);
     await user.updateOne({ _id: userId }, { active: true });
     res.redirect('http://localhost:3000/home');
   } catch (err) {

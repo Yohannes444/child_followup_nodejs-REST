@@ -27,13 +27,15 @@ const studentRouter = require ('./routes/studentWightListRouter');
 const attendanceRouter = require('./routes/attendanceRouter');
 const FeedBackRouter = require('./routes/FeedBackRouter')
 
-const url = config.mongoUrl;
+require('dotenv').config()
+const url = process.env.MONGODBURL;
 const connect = mongoose.connect(url);
 connect.then((db) => {
   console.log("Connected correctly to server");
 },(err)=>{console.log(err)}
 )
 var app = express();
+
 app.all('*', (req, res, next) => {
   if (req.secure) {
     return next();
@@ -46,6 +48,7 @@ app.use(cors({
   origin: 'http://localhost:3000',
   credentials: true
 }));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
