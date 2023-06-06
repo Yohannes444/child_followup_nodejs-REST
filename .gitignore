@@ -14,7 +14,7 @@ public/materials/*.gif
 public/materials/*.pdf
 public/materials/*.ppt
 
-
+config.js
 public/Assignments/*.jpg
 public/Assignments/*.jpeg
 public/Assignments/*.png
