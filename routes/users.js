@@ -9,7 +9,6 @@ const jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var cors=require('./cors')
 const nodemailer =require('nodemailer')
 require('dotenv').config()
-const config = require('../config.js');
 
 
 router.use(bodyParser.json())
