@@ -33,6 +33,10 @@
     "session-file-store": "^1.2.0",
     "socket.io": "^4.5.3"
   },
+  "devDependencies": {
+  "constantinople": ">=3.1.1",
+    "uglify-js": ">= 2.4.24"
+}.
   "author": "Yohannnes Mulat, Dawit twodros, Andebet sisay",
   "license": "ISC"
 }
